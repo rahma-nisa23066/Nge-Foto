@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nge-Upload</title>
+  <style>
+    /* CSS Style */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #000000;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #ffffff;
+      color: #000000;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 .fa-camera {
+      margin-right: 0.5rem;
+      font-size: 1.5em;
+    }
+
+    .logo-icon {
+      width: 24px;
+      height: auto;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    header nav a {
+      color: #000000;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    header nav a:hover {
+      color: #525252;
+    }
+
+    section.upload {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      background-image: url('background camera.jpeg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    form {
+      max-width: 500px;
+      width: 100%;
+      background-color: #ffffff50;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    form label {
+      display: block;
+      margin: 1rem 0 0.5rem;
+      font-weight: bold;
+    }
+
+    form input,
+    form textarea,
+    form button {
+      width: 100%;
+      background-color: #ffffff50;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    form button {
+      background-color: #353535;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: #505050;
+    }
+
+    footer {
+      background-color: #ffffff;
+      color: #000000;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    /* Style for uploaded photos */
+    .uploaded-photos {
+      margin-top: 2rem;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .photo-card {
+      width: 200px;
+      padding: 1rem;
+      background-color: #ffffff50;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .response-message {
+      color: rgb(255, 255, 255);
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Nge-Upload</h1>
+    <nav>
+      <a href="home.html">Beranda</a>
+      <a href="upload.html">Nge-Upload</a>
+      <a href="buy-sell.html">Nge-Cuan</a>
+    </nav>
+  </header>
+
+  <section class="upload">
+    <form id="uploadForm">
+      <label for="photoTitle">Judul Foto:</label>
+      <input type="text" id="photoTitle" name="photoTitle" required>
+
+      <label for="photoDescription">Deskripsi:</label>
+      <textarea id="photoDescription" name="photoDescription" required></textarea>
+
+      <label for="photoFile">Upload Photo:</label>
+      <input type="file" id="photoFile" name="photoFile" accept="image/*" required>
+
+      <button type="submit">Upload</button>
+    </form>
+    
+    <!-- Pesan sukses setelah foto di-upload -->
+    <p id="responseMessage" class="response-message" style="display: none;">Sukses Nge-Upload Foto!</p>
+
+    <!-- Galeri foto yang sudah di-upload -->
+    <div class="uploaded-photos" id="uploadedPhotos"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2024 Nge-Foto Website</p>
+  </footer>
+
+  <script>
+    // JavaScript untuk handle submit form, preview, dan menampilkan foto setelah di-upload
+    document.getElementById('uploadForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('photoTitle').value;
+      const description = document.getElementById('photoDescription').value;
+      const file = document.getElementById('photoFile').files[0];
+      const uploadedPhotos = document.getElementById('uploadedPhotos');
+      const responseMessage = document.getElementById('responseMessage');
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          // Membuat elemen foto baru
+          const photoCard = document.createElement('div');
+          photoCard.classList.add('photo-card');
+          
+          const photoTitle = document.createElement('h3');
+          photoTitle.textContent = title;
+          
+          const photoDescription = document.createElement('p');
+          photoDescription.textContent = description;
+          
+          const photoImg = document.createElement('img');
+          photoImg.src = e.target.result;
+          photoImg.alt = title;
+
+          // Menyusun elemen foto di dalam kartu foto
+          photoCard.appendChild(photoTitle);
+          photoCard.appendChild(photoDescription);
+          photoCard.appendChild(photoImg);
+
+          // Menambahkan kartu foto ke galeri foto
+          uploadedPhotos.appendChild(photoCard);
+
+          // Menampilkan pesan sukses
+          responseMessage.style.display = "block";
+
+          // Reset form
+          document.getElementById('uploadForm').reset();
+          
+          // Menyembunyikan pesan setelah beberapa detik
+          setTimeout(() => {
+            responseMessage.style.display = "none";
+          }, 3000);
+        };
+        
+        reader.readAsDataURL(file);
+      } else {
+        alert("Please select a file to upload.");
+      }
+    });
+
+    // Menyimpan data ke localStorage
+    document.getElementById("uploadForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const title = document.getElementById("photoTitle").value;
+      const description = document.getElementById("photoDescription").value;
+      const file = document.getElementById("photoFile").files[0];
+      
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const photoData = {
+            title: title,
+            description: description,
+            imageUrl: e.target.result,
+            category: "myUploads" 
+          };
+
+          // Ambil foto-foto yang sudah ada di Local Storage
+          let photos = JSON.parse(localStorage.getItem("photos")) || [];
+          photos.push(photoData);
+          
+          // Simpan kembali ke Local Storage
+          localStorage.setItem("photos", JSON.stringify(photos));
+
+          // Reset form dan tampilkan pesan sukses
+          document.getElementById("uploadForm").reset();
+          responseMessage.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>

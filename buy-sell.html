@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nge-Cuan</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #ffffff;
+      color: #000000;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    header h1 .fa-camera {
+      margin-right: 0.5rem;
+      font-size: 1.5em;
+    }
+
+    .logo-icon {
+        width: 24px; /* Sesuaikan ukuran sesuai kebutuhan */
+        height: auto;
+        margin-right: 0.5rem;
+        vertical-align: middle;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+  
+    header nav a {
+      color: #000000;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+  
+    header nav a:hover {
+      color: #525252;
+    }
+
+    footer {
+      background-color: #ffffff;
+      color: #000000;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .marketplace {
+      flex: 1;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .marketplace h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    #photoGallery, #catalogGallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    .photo-card {
+      width: 200px;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .photo-card h3 {
+      font-size: 1.1rem;
+      color: #333;
+      margin: 0.8rem 0 0.4rem;
+    }
+
+    .photo-card p {
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    .photo-card button {
+      background-color: #000000;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 0.8rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .photo-card button:hover {
+      background-color: #444444;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-5px);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Nge-Cuan</h1>
+    <nav>
+      <a href="home.html">Beranda</a>
+      <a href="upload.html">Nge-Upload</a>
+      <a href="buy-sell.html">Nge-Cuan</a>
+    </nav>
+  </header>
+
+  <section class="marketplace">
+    <h2>Explore Our Collection</h2>
+
+      <h3>Explore Jepretanmu</h3>
+      <div id="photoGallery" style="margin-bottom: 2rem;">
+      </div>
+    
+      <h3>Beli Jepretan Kuy!</h3>
+      <div id="catalogGallery">
+      </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2024 Nge-Foto Website</p>
+  </footer>
+
+  <script>
+    // Retrieve user-uploaded photos from local storage
+    const uploadedPhotos = JSON.parse(localStorage.getItem("photos")) || [];
+
+    const photoGallery = document.getElementById("photoGallery");
+    const catalogGallery = document.getElementById("catalogGallery");
+
+    // Static catalog photos for sale
+    const catalogPhotos = [
+      { title: "Tunjungan Street", description: "The citylight at Tunjungan.", imgSrc: "tunjungan pic.jpg", price: "$40" },
+      { title: "Campuss View", description: "Another view of State University of Surabaya.", imgSrc: "campuss pic.jpg", price: "$40" },
+      { title: "Bromo Mountain", description: "A beautiful Bromo mountain view.", imgSrc: "bromo pic.jpg", price: "$30" },
+    ];
+
+    // Display user's uploaded photos
+    uploadedPhotos.forEach(photo => {
+      if (photo.category === "myUploads") {
+        const photoCard = document.createElement("div");
+        photoCard.classList.add("photo-card");
+
+        const photoImg = document.createElement("img");
+        photoImg.src = photo.imageUrl;
+        photoImg.alt = photo.title;
+
+        const photoTitle = document.createElement("h3");
+        photoTitle.textContent = photo.title;
+
+        const photoDescription = document.createElement("p");
+        photoDescription.textContent = photo.description;
+
+        photoCard.appendChild(photoImg);
+        photoCard.appendChild(photoTitle);
+        photoCard.appendChild(photoDescription);
+
+        photoGallery.appendChild(photoCard);
+      }
+    });
+
+    // Display catalog photos for sale
+    catalogPhotos.forEach(photo => {
+      const photoCard = document.createElement("div");
+      photoCard.classList.add("photo-card");
+
+      const photoImg = document.createElement("img");
+      photoImg.src = photo.imgSrc;
+      photoImg.alt = photo.title;
+
+      const photoTitle = document.createElement("h3");
+      photoTitle.textContent = photo.title;
+
+      const photoDescription = document.createElement("p");
+      photoDescription.textContent = photo.description;
+
+      const photoPrice = document.createElement("p");
+      photoPrice.textContent = photo.price;
+      photoPrice.style.color = "#000000";
+      photoPrice.style.fontWeight = "bold";
+
+      const buyButton = document.createElement("button");
+      buyButton.textContent = "Buy";
+      buyButton.addEventListener("click", () => {
+        alert(`Thank you for purchasing "${photo.title}"!`);
+      });
+
+      photoCard.appendChild(photoImg);
+      photoCard.appendChild(photoTitle);
+      photoCard.appendChild(photoDescription);
+      photoCard.appendChild(photoPrice);
+      photoCard.appendChild(buyButton);
+
+      catalogGallery.appendChild(photoCard);
+    });
+  </script>
+</body>
+</html>
